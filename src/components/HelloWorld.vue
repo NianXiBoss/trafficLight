@@ -1,58 +1,124 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div class="box" :class="{ red: isRed }"></div>
+    <div class="box" :class="{ yellow: isYellow }"></div>
+    <div class="box" :class="{ green: isGreen }"></div>
+    <div class="box number">{{total}}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  mounted() {
+    this.countdown()
+  },
+  data() {
+    return {
+      total: 10,
+      isRed: true,
+      isYellow: false,
+      isGreen: false,
+    }
+  },
+  methods: {
+    countdown() {
+      let that = this
+      redCtrl()
+
+      function redCtrl() {
+        if (that.total === 0) {
+          that.total = 10
+          that.isRed = !that.isRed
+        }
+        let timeIdRed = setInterval(function () {
+          that.total--
+          if (that.total <= 4) {
+            that.isRed = !that.isRed
+          }
+          if (that.total === 0) {
+            clearInterval(timeIdRed)
+            yellowCtrl()
+          }
+        }, 1000)
+      }
+
+      function yellowCtrl() {
+        that.isRed = false
+        that.isYellow = !that.isYellow
+        that.total = 5
+        let timeIdYellow = setInterval(function () {
+          that.total--
+          if (that.total <= 3) {
+            that.isYellow = !that.isYellow
+          }
+          if (that.total === 0) {
+            clearInterval(timeIdYellow)
+            greenCtrl()
+          }
+        }, 1000)
+      }
+
+
+      function greenCtrl() {
+        that.isYellow = false
+        that.isGreen = !that.isGreen
+        that.total = 10
+        let timeIdGreen = setInterval(function () {
+          that.total--
+          if (that.total <= 4) {
+            that.isGreen = !that.isGreen
+          }
+          if (that.total === 0) {
+            clearInterval(timeIdGreen)
+            redCtrl()
+          }
+        }, 1000)
+      }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.hello {
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 1200px;
+  height: 300px;
+  background-color: skyblue;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.box {
+  width: 23%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 50%;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.hello  div:last-child {
+  border-radius: 0;
 }
-a {
-  color: #42b983;
+
+.red {
+  background-color: red;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+}
+
+.number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
 }
 </style>
